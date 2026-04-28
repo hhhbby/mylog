@@ -32,17 +32,17 @@ public:
         std::swap(writerIndex_, rhs.writerIndex_);
     }
 
-    char *begin()
+    const char *begin() const
     {
         return buffer_.data();
     }
 
-    size_t writableBytes()
+    size_t writableBytes()  const
     {
         return buffer_.size() - writerIndex_;
     }
 
-    size_t readableBytes()
+    size_t readableBytes()  const
     {
         return writerIndex_ - readerIndex_;
     }
