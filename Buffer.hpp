@@ -8,6 +8,7 @@ namespace mylog{
 
 class Buffer {
 public:
+
     static const size_t kInitialSize = 256;
 
     Buffer()
@@ -23,6 +24,25 @@ public:
         ensureWritableBytes(len);
         std::copy(data, data+len, buffer_.begin() + writerIndex_);
         writerIndex_ += len;
+    }
+
+    void append(int x)  // // Efficient Integer to String Conversions, by Matthew Wilson.
+    {
+        static const char digits[20] = "9876543210123456789";     // for append(int)
+        const char *zero = digits + 9;
+        char buf[11] = {0};     // int带上符号最多有 -2147482648 共11位
+        char* p = buf;
+        int  i = x;
+        do
+        {
+            int lsd = static_cast<int>(i % 10);
+            i /= 10;
+            *p++ = zero[lsd];
+        } while (i != 0);
+        if (x < 0)
+            *p++ = '-';
+        std::reverse(buf, p);
+        append(buf, p - buf);
     }
 
     void swap(Buffer &rhs)
@@ -64,9 +84,9 @@ protected:
     }
 
 private:
-    std::vector<char> buffer_;
     size_t readerIndex_;
     size_t writerIndex_;
+    std::vector<char> buffer_;
 };
 
 }

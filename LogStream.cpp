@@ -2,6 +2,8 @@
 
 namespace mylog
 {
+
+
     LogStream::self& LogStream::operator<<(const string& str)
     {
         buffer_.append(str.data(), str.size());
