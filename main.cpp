@@ -1,5 +1,6 @@
 #include "Logger.h"
 #include "Worker.hpp"
+#include "LogFile.h" 
 #include <iostream>
 #include <sys/time.h>
 
@@ -31,51 +32,69 @@ inline double timeDifference(Timestamp high, Timestamp low)
     return static_cast<double>(diff) / Timestamp::kMicroSecondsPerSecond;
 }
 
-mylog::Worker* g_worker = NULL;
+mylog::Worker* g_worker = nullptr;
 
-void asyncOutput(const char* msg, int len)
+void asyncOutput(const char* msg, size_t len)
 {
   g_worker->push(msg, len);
 }
+
+std::unique_ptr<mylog::LogFile> g_logFile;
+
+void outPutFunc(const char* msg, size_t len)
+{
+    g_logFile->append(msg, len);
+}
+
+void flushFunc()
+{
+    g_logFile->flush();
+}
+
 std::function<void(mylog::Buffer&)> f = [](mylog::Buffer& buf) {
-    std::cout << "by other thread " << std::string(buf.begin(), buf.readableBytes());
+    g_logFile->append(buf.begin(), buf.readableBytes());
 };
 
-void bench(bool longLog)
+void bench(bool )
 {
+    const int kBatch = 1024;
+    string s(1024, 'c');
 
-  int cnt = 0;
-  const int kBatch = 1000;
-  std::string empty = " ";
-  std::string longStr(3000, 'X');
-  longStr += " ";
 
-//   for (int t = 0; t < 30; ++t)
-//   {
     Timestamp start = Timestamp::now();
     for (int i = 0; i < kBatch; ++i)
     {
-      LOG_INFO << "Hello 0123456789" << " abcdefghijklmnopqrstuvwxyz "
-               << (longLog ? longStr : empty)
-               << cnt;
-      ++cnt;
+      LOG_INFO << s;
     }
     Timestamp end =Timestamp::now();
-    printf("timeDifference %f\n", timeDifference(end, start)*1000000/kBatch);
-    struct timespec ts = { 0, 500*1000*1000 };
-    nanosleep(&ts, NULL);
+    printf("1MiB log need time %f\n", timeDifference(end, start));
+
+    // printf("timeDifference %f\n", timeDifference(end, start)*1000000/kBatch);
+    // struct timespec ts = { 0, 500*1000*1000 };
+    // nanosleep(&ts, NULL);
 //   }
+
+    s = string(1024*1024, 'c');
+    start = Timestamp::now();
+    for (int i = 0; i < kBatch; ++i)
+    {
+      LOG_INFO << s;
+    }
+    end = Timestamp::now();
+    printf("1GiB log need time %f\n", timeDifference(end, start));
 }
 
 int main()
 {
-    LOG_WARN << "xxx";
+    g_logFile.reset(new mylog::LogFile("xxxproject"));
+    mylog::Logger::setOutput(outPutFunc);
+    mylog::Logger::setFlush(flushFunc);
     bench(false);
+    printf("using async\n");
+
     mylog::Logger::setOutput(asyncOutput);
     mylog::Worker w(f);
     g_worker = &w;
     w.start();
-    LOG_WARN << "yyy";
     bench(false);
-    // bench(true);
 }

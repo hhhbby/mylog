@@ -11,8 +11,8 @@ namespace mylog
     }
     LogStream::self& LogStream::operator<<(int n)
     {
-        string s = std::to_string(n);
-        return *this << s;
+        buffer_.append(n);
+        return *this;
     }
 
     Buffer& LogStream::buffer()

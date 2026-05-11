@@ -17,7 +17,7 @@ namespace mylog
         "FATAL",
     };
 
-    void defaultOutput(const char* msg, int len)
+    void defaultOutput(const char* msg, size_t len)
     {
     size_t n = fwrite(msg, 1, len, stdout);
     //FIXME check n

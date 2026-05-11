@@ -24,7 +24,7 @@ public:
     static inline LogLevel logLevel();
     static void setLogLevel(LogLevel);
 
-    typedef void (*OutputFunc)(const char* msg, int len);
+    typedef void (*OutputFunc)(const char* msg, size_t len);
     typedef void (*FlushFunc)();
     static  void setOutput(OutputFunc f);
     static  void setFlush(FlushFunc f);

@@ -8,14 +8,24 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)   #如果当前的编译器太老，不支
 add_compile_options(-Wall -Wextra -g)
 
 # 自动帮找 pthread
-find_package(Threads REQUIRED)
+#find_package(Threads REQUIRED)
 
 set(base_SRCS
     Logger.cpp
     LogStream.cpp
+    LoggFile.cpp
 )
 
+file(GLOB MYLOG_SOURCES "*.cpp")
+add_library(mylog_lib STATIC ${MYLOG_SOURCES})
+# 设置头文件搜索路径，PUBLIC 表示链接了这个库的目标也能使用这个路径
+target_include_directories(mylog_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 # 6. 定义要生成的可执行文件，以及它的源文件
-add_executable(mylog main.cpp ${base_SRCS})
+add_executable(mylog main.cpp)
+#add_executable(mylog  ${base_SRCS})
+target_link_libraries(mylog PRIVATE mylog_lib)
 # 2. 不要写死 pthread，而是链接 CMake 提供的一个虚拟目标 Threads::Threads
-target_link_libraries(mylog Threads::Threads)
+#target_link_libraries(mylog Threads::Threads)
+
+add_subdirectory(tests)

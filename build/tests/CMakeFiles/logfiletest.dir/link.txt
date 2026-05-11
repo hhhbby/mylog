@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/logfiletest.dir/LogFile_test.cpp.o -o logfiletest  ../libmylog_lib.a 

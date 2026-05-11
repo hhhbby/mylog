@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/mylog.dir/main.cpp.o -o mylog  libmylog_lib.a 

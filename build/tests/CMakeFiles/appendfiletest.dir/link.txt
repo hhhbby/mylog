@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/appendfiletest.dir/AppendFile_test.cpp.o -o appendfiletest  ../libmylog_lib.a 
