@@ -10,7 +10,7 @@ class LogStream {
 public:
     self& operator<<(const string& str);
     self& operator<<(int n);
-    Buffer& buffer();
+    const Buffer& buffer() const;
 private:
     Buffer buffer_;
 };

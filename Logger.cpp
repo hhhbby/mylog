@@ -45,10 +45,10 @@ namespace mylog
     }
     Logger::~Logger()
     {
-        stream_.buffer().append("\n", 1);
+        stream_ << "\n";
         const Buffer& buf(stream_.buffer());
         g_output(buf.begin(), buf.readableBytes());
-        g_flush();
+        g_flush();  // 可以只在适当时候（FATEL）进行flush
     }
     void Logger::setLogLevel(LogLevel level)
     {

@@ -15,7 +15,7 @@ namespace mylog
         return *this;
     }
 
-    Buffer& LogStream::buffer()
+    const Buffer& LogStream::buffer() const
     {
         return buffer_;
     }

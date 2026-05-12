@@ -1,2 +1,0 @@
-/usr/bin/ar qc libmylog_lib.a CMakeFiles/mylog_lib.dir/LogFile.cpp.o CMakeFiles/mylog_lib.dir/LogStream.cpp.o CMakeFiles/mylog_lib.dir/Logger.cpp.o CMakeFiles/mylog_lib.dir/main.cpp.o
-/usr/bin/ranlib libmylog_lib.a

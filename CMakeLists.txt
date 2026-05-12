@@ -22,9 +22,7 @@ add_library(mylog_lib STATIC ${MYLOG_SOURCES})
 target_include_directories(mylog_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # 6. 定义要生成的可执行文件，以及它的源文件
-add_executable(mylog main.cpp)
-#add_executable(mylog  ${base_SRCS})
-target_link_libraries(mylog PRIVATE mylog_lib)
+
 # 2. 不要写死 pthread，而是链接 CMake 提供的一个虚拟目标 Threads::Threads
 #target_link_libraries(mylog Threads::Threads)
 

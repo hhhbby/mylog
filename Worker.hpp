@@ -32,8 +32,11 @@ public:
     void push(const char* data, size_t len)
     {
         std::lock_guard<std::mutex> lk(mutex_);
+        // 减少系统调用次数
+        bool wasEmpty = (producerBuf_.readableBytes() == 0);
         producerBuf_.append(data, len);
-        cond_.notify_one();
+        if (wasEmpty)
+            cond_.notify_one();
     }
 
 

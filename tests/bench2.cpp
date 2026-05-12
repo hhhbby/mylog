@@ -57,8 +57,8 @@ std::function<void(mylog::Buffer&)> f = [](mylog::Buffer& buf) {
 
 void bench(bool )
 {
-    const int kBatch = 1024;
-    string s(1024, 'c');
+    const int kBatch = 1024 * 16;
+    string s(64, 'c');
 
 
     Timestamp start = Timestamp::now();
@@ -74,9 +74,10 @@ void bench(bool )
     // nanosleep(&ts, NULL);
 //   }
 
-    s = string(1024*1024, 'c');
+    // s = string(1024*1024, 'c');
     start = Timestamp::now();
-    for (int i = 0; i < kBatch; ++i)
+    const int kBatch2 = 1024 *1024 *16;
+    for (int i = 0; i < kBatch2; ++i)
     {
       LOG_INFO << s;
     }
